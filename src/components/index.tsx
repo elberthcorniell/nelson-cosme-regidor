@@ -48,7 +48,7 @@ export const CardWithFrame = ({ children, className }: {
   className?: string,
 }) =>
   <div className="bg-white p-4 max-w-[800px] w-full">
-    <div className={`border-2 border-solid border-[#CDA434] flex flex-col gap-10 px-6 py-10 ${className}`}>
+    <div className={` flex flex-col gap-10 px-6 py-10 ${className}`}>
       {children}
     </div>
   </div>

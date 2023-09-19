@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@font-face {
+  font-family: Kenyan;
+  src: url("../../public/static/fonts/kenyan\ coffee\ rg.otf");
+  ;
+}
+
 * {
   overflow-x: visible;
 }
@@ -31,6 +38,7 @@ section {
   width: 100vw;
   -webkit-scroll-snap-align: start;
   scroll-snap-align: start;
+  background-image: url("/static/images/background.png");
 }
 
 select {
@@ -39,17 +47,20 @@ select {
 
 button {
   cursor: pointer;
-  border: 1px solid white;
+  background-color: #DD9C3F;
+  color: white;
+  border: none;
   padding: 0 1rem;
   height: 60px;
   overflow: hidden;
   white-space: nowrap;
-  border-radius: 30px;
+  border-radius: 8px;
+  font-weight: bold;
 }
 
 h1,
 h2 {
-  font-family: 'Prata', serif;
+  font-family: 'Kenyan', serif;
   font-weight: 200;
 }
 
