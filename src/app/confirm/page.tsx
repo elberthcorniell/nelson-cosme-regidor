@@ -115,7 +115,7 @@ const Side = ({ children, className }: {
                 <button onClick={() => {
                     const shareData = {
                         url: `https://${window.location.host}`,
-                        text: "Verifica si estás habilitado para votar en las Elecciones Primarias del 1 de octubre del 2023 y si tú intención del voto es a favor de Nelson Cosme Hijo - REG👍🏼DOR, llena el formulario y regístrate en nuestra base de datos."
+                        text: "Verifica si estás habilitado para votar en las Elecciones Primarias del 1 de octubre del 2023 y si tú intención del voto es a favor de Nelson Cosme Hijo - REG👍🏼DOR, llena el formulario y regístrate en nuestra base de datos.\n\n¡Contamos con tu apoyo!"
                     }
                     if (navigator.share && navigator.canShare(shareData)) {
                         navigator.share(shareData)
