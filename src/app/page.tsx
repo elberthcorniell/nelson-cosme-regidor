@@ -67,10 +67,7 @@ export default function Home() {
         <div className='scroller snap-y fullscreen overflow-y-auto overflow-x-hidden w-screen' ref={container} style={{
           scrollBehavior: 'smooth',
         }}>
-          <section className=' bg-cover relative' ref={heroRef} style={{
-            backgroundColor: 'blue',
-            backgroundPosition: 'center top',
-          }}>
+          <section className=' bg-cover relative' ref={heroRef}>
             <div className='grid md:grid-cols-2 grid-cols-1 fullscreen p-5 !pb-0 max-w-[1444px] m-auto'>
               <Side>
                 <div className='mt-10 flex flex-col md:items-start items-center'>
@@ -84,10 +81,7 @@ export default function Home() {
               <div className='md:block hidden' style={NelsonBg} />
             </div>
           </section>
-          <section className=' bg-cover relative' ref={confirmRef} style={{
-            backgroundColor: 'blue',
-            backgroundPosition: 'center top',
-          }}>
+          <section className=' bg-cover relative' ref={confirmRef}>
             <div className='grid md:grid-cols-2 grid-cols-1 fullscreen !pb-0 max-w-[1444px] m-auto'>
               <Side className='!hidden md:!flex' />
               <div className=' bg-white flex items-center fullscreen w-full'>

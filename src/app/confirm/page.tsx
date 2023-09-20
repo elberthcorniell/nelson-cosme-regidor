@@ -1,5 +1,4 @@
 "use client"
-import { CardWithFrame, SlideBottom } from '@/components'
 import { useInView } from 'framer-motion'
 import React, { HTMLAttributes, useEffect, useRef, useState } from 'react'
 
@@ -67,10 +66,7 @@ export default function Home() {
                 <div className='scroller snap-y fullscreen overflow-y-auto overflow-x-hidden w-screen' ref={container} style={{
                     scrollBehavior: 'smooth',
                 }}>
-                    <section className=' bg-cover relative' ref={heroRef} style={{
-                        backgroundColor: 'blue',
-                        backgroundPosition: 'center top',
-                    }}>
+                    <section className=' bg-cover relative' ref={heroRef}>
                         <div className='grid md:grid-cols-2 grid-cols-1 fullscreen p-5 !pb-0 max-w-[1444px] m-auto'>
                             <Side />
                             <div className='md:block hidden' style={NelsonBg} />
