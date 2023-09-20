@@ -1,62 +1,152 @@
 "use client"
 import { CardWithFrame, SlideBottom } from '@/components'
-import { useSearchParams } from 'next/navigation'
-const Page = () => {
-    const searchParams = useSearchParams()
-    return <section className=' snap-start bg-slate-50 bg-cover' id="confirm" style={{
-        backgroundImage: 'url(/static/images/IMG_8258.jpg)',
-        backgroundPosition: 'center top',
-    }}>
-        <div className='flex items-center justify-center fullscreen p-4 h-full'>
-            <SlideBottom delay={0.1}>
-                <CardWithFrame>
-                    <SlideBottom delay={0.3} className='w-full'>
-                        <img src="/icon.png" alt="" className='md:h-[200px] md:w-[200px] h-[100px] w-[100px] m-auto' />
-                    </SlideBottom>
-                    <SlideBottom delay={0.5} className='w-full'>
-                        <p className=' text-black text-center -mt-10'>
-                            <i>
-                                Querido/a <strong>{searchParams.get('name')}</strong>,<br />
-                                {searchParams.get('answer') === 'si' ?
-                                    '¡Enhorabuena! Nos complace saber que nos estarás acompañando.' :
-                                    '¡Lástima que no nos puedas acompañar! Pero recuerda que si cambias de opinión, puedes volver a este link hasta el 1ro de noviembre'}
-                            </i>
-                        </p>
-                        <br />
-                        {searchParams.get('answer') === 'si' && <>
-                            <h2 className=' text-black text-xl'>Recuerda</h2>
-                            <ul className=' list-decimal  pl-10'>
-                                <li className=' text-black'>
-                                    El código de vestimenta es <b><i>negro</i></b>
-                                </li>
-                                <li className=' text-black'>
-                                    La ceremonia inicia a las <b><i>5:00pm</i></b>
-                                </li>
-                                <li className=' text-black'>
-                                    La celebración inicia a las <b><i>6:00pm</i></b>
-                                </li>
-                            </ul>
-                            <br />
-                        </>}
-                        <br />
-                        <p className=' text-black text-center'>
-                            <i>
-                                <strong>Para nosotros el regalo Perfecto es contar con tu presencia, pero por si deseas agradarnos con algún detalle, aquí te dejamos el link de nuestra lista de regalos en Amazon.</strong>
-                            </i>
-                        </p>
-                    </SlideBottom>
-                    <SlideBottom delay={0.7} className='w-full'>
-                        <a href="https://www.amazon.com/wedding/ismaldy-santana-william-jose-sanchez--december-2023/registry/1KBW21LL99LB0" target="_blank" rel="noreferrer"><button className='text-black !border-black flex flex-nowrap gap-2 items-center w-full justify-center'>Lista de regalos</button></a>
-                    </SlideBottom>
-                    <p className=' text-black text-center'>
-                        <i>
-                            <strong>Lista de regalos en Casa Cuesta Santiago disponible a partir del mes de noviembre.</strong>
-                        </i>
-                    </p>
-                </CardWithFrame>
-            </SlideBottom>
-        </div>
-    </section>
+import { useInView } from 'framer-motion'
+import React, { HTMLAttributes, useEffect, useRef, useState } from 'react'
+
+const NelsonBg: HTMLAttributes<HTMLDivElement>['style'] = {
+    backgroundImage: 'url("/static/images/nelson.png")',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'bottom',
+    backgroundSize: 'contain'
 }
 
-export default Page
+export default function Home() {
+    const container = useRef<HTMLDivElement>(null)
+    const heroRef = useRef<HTMLDivElement>(null)
+    const confirmRef = useRef<HTMLDivElement>(null)
+    const [isFormLoading, setIsFormLoading] = useState(false)
+    const [timeMissing, setTimeMissing] = useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+    })
+    const isConfirmInView = useInView(confirmRef, {
+        root: container,
+        margin: '-100px',
+    })
+    const [voterData, setVoterData] = useState<any>(null)
+    const [voterDataLoading, setVoterDataLoading] = useState(false)
+    const size = useScreenSize()
+    const isMedium = (size?.width || 0) < 768
+    const isSmallHeight = (size?.height || 0) < 900
+
+    useEffect(() => {
+        const date = new Date()
+        date.setDate(17)
+        date.setFullYear(2023)
+        date.setMonth(11)
+        date.setHours(17, 0, 0)
+        let remainer = date.getTime() - Date.now()
+        const dayInMs = 1000 * 60 * 60 * 24
+        const hourInMs = 1000 * 60 * 60
+        const minInMs = 1000 * 60
+        const secInMs = 1000
+
+        const days = Math.floor(remainer / dayInMs)
+        remainer -= dayInMs * days
+        const hours = Math.floor(remainer / hourInMs)
+        remainer -= hourInMs * hours
+        const minutes = Math.floor(remainer / minInMs)
+        remainer -= minInMs * minutes
+        const seconds = Math.floor(remainer / secInMs)
+        remainer -= secInMs * seconds
+        setTimeout(() => {
+            setTimeMissing({
+                days, hours, minutes, seconds
+            })
+        }, 1_000)
+    }, [timeMissing])
+
+    return (
+        <main>
+            <title>Nelson Coseme - Regidor</title>
+            <div style={{
+                transition: 'opacity 1s ease-in-out',
+            }}>
+                <div className='scroller snap-y fullscreen overflow-y-auto overflow-x-hidden w-screen' ref={container} style={{
+                    scrollBehavior: 'smooth',
+                }}>
+                    <section className=' bg-cover relative' ref={heroRef} style={{
+                        backgroundColor: 'blue',
+                        backgroundPosition: 'center top',
+                    }}>
+                        <div className='grid md:grid-cols-2 grid-cols-1 fullscreen p-5 !pb-0 max-w-[1444px] m-auto'>
+                            <Side />
+                            <div className='md:block hidden' style={NelsonBg} />
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    )
+}
+
+const FollowUs = () => {
+    return <div className=' w-fit flex items-center gap-2 mt-2'>
+        <strong>Siguenos en:</strong>
+        <a href="https://www.instagram.com/nelsoncosme" target='_blank' rel="noreferrer" className='button'>Instagram</a>
+    </div>
+}
+
+const Side = ({ children, className }: {
+    children?: React.ReactNode
+    className?: string
+}) => {
+    const size = useScreenSize()
+    const isMedium = (size?.width || 768) < 768
+    const isSmallHeight = (size?.height || 0) < 900
+
+    return <div className={`flex justify-center ${className || ''}`} style={isMedium ? {
+        ...NelsonBg,
+        marginLeft: -20,
+        marginRight: -20,
+    } : {}}>
+        <div className={`flex flex-col ${isMedium ? "" : "gap-5"} justify-between p-5 md:w-auto w-full`}>
+            <div>
+                <img src="/static/images/prm.png" alt="" className='md:h-20 md:w-20 w-10 h-10 object-cover' />
+                <div className='flex flex-col mt-10'>
+                    <span className=' uppercase' style={{
+                        fontFamily: 'Kenyan',
+                        fontSize: isSmallHeight ? 80 : 100,
+                        lineHeight: 1,
+                        width: 'fit-content'
+                    }}>Gracias por el apoyo</span>
+                    <FollowUs />
+                </div>
+            </div>
+            <div className='md:mx-0 mx-auto'>
+                <button onClick={() => {
+                    const shareData = {
+                        url: `https://${window.location.host}`
+                    }
+                    if (navigator.share && navigator.canShare(shareData)) {
+                        navigator.share(shareData)
+                    } else {
+                        navigator.clipboard.writeText(shareData.url)
+                        alert("Link copiado")
+                    }
+                }} className=' flex items-center gap-2'>Compartir con otros <img src="/static/images/share.svg" width={20} height={20} /></button>
+            </div>
+        </div>
+    </div>
+}
+
+const useScreenSize = () => {
+    const [screenSize, setScreenSize] = useState<{
+        width: number,
+        height: number
+    }>()
+    useEffect(() => {
+        const updateScreenSize = () => {
+            setScreenSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            })
+        }
+        updateScreenSize()
+        window.addEventListener('resize', updateScreenSize)
+        return () => window.removeEventListener('resize', updateScreenSize)
+    }, [])
+    return screenSize
+}

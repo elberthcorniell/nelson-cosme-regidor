@@ -1,9 +1,14 @@
 "use client"
-import { ImageGalery } from '@/components/image-galery'
-import { images } from '@/components/images'
-import { CardWithFrame, ClubButton, SlideBottom } from '@/components'
+import { CardWithFrame, SlideBottom } from '@/components'
 import { useInView } from 'framer-motion'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { HTMLAttributes, useEffect, useRef, useState } from 'react'
+
+const NelsonBg: HTMLAttributes<HTMLDivElement>['style'] = {
+  backgroundImage: 'url("/static/images/nelson.png")',
+  backgroundRepeat: 'no-repeat',
+  backgroundPositionY: 'bottom',
+  backgroundSize: 'contain'
+}
 
 export default function Home() {
   const container = useRef<HTMLDivElement>(null)
@@ -22,6 +27,10 @@ export default function Home() {
   })
   const [voterData, setVoterData] = useState<any>(null)
   const [voterDataLoading, setVoterDataLoading] = useState(false)
+  const size = useScreenSize()
+  const isMedium = (size?.width || 0) < 768
+  const isSmallHeight = (size?.height || 0) < 900
+
   useEffect(() => {
     const date = new Date()
     date.setDate(17)
@@ -62,29 +71,25 @@ export default function Home() {
             backgroundColor: 'blue',
             backgroundPosition: 'center top',
           }}>
-            <div className='grid grid-cols-2 fullscreen p-5 !pb-0 max-w-[1444px] m-auto'>
+            <div className='grid md:grid-cols-2 grid-cols-1 fullscreen p-5 !pb-0 max-w-[1444px] m-auto'>
               <Side>
-                <div className='mt-10'>
-                  <p>Dale al botón y únete a nuestro equipo</p>
-                  <button className=' w-fit my-2' onClick={() => {
+                <div className='mt-10 flex flex-col md:items-start items-center'>
+                  <p className={`${isSmallHeight ? 'text-sm' : ''} w-fit`}>Dale al botón y únete a nuestro equipo</p>
+                  <button className={' w-fit my-2'} onClick={() => {
                     container.current?.scrollTo(0, document.body.scrollHeight);
                   }}>Regístrate aquí</button>
-                  <p>¡Contamos con tu apoyo!</p>
+                  <p className={`${isSmallHeight ? 'text-sm' : ''} w-fit`}>¡Contamos con tu apoyo!</p>
                 </div>
               </Side>
-              <div style={{
-                backgroundImage: 'url("/static/images/nelson.png")',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'bottom'
-              }} />
+              <div className='md:block hidden' style={NelsonBg} />
             </div>
           </section>
           <section className=' bg-cover relative' ref={confirmRef} style={{
             backgroundColor: 'blue',
             backgroundPosition: 'center top',
           }}>
-            <div className='grid grid-cols-2 fullscreen !pb-0 max-w-[1444px] m-auto'>
-              <Side />
+            <div className='grid md:grid-cols-2 grid-cols-1 fullscreen !pb-0 max-w-[1444px] m-auto'>
+              <Side className='!hidden md:!flex' />
               <div className=' bg-white flex items-center fullscreen w-full'>
                 <div className=' flex-grow'>
                   <SlideBottom isInView={isConfirmInView} delay={0.1}>
@@ -102,7 +107,7 @@ export default function Home() {
                         body,
                       })
                         .then(() => {
-                          window.location.href = `http://${window.location.host}/confirm?answer=${body.get('answer')}&name=${body.get('name')}`
+                          window.location.href = `http://${window.location.host}/confirm`
                         })
                         .catch(() => {
                           alert('Ha ocurrido un error, por favor intente de nuevo')
@@ -142,7 +147,7 @@ export default function Home() {
                           voterData?.status === 404 ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
                             <p className=' text-black'>Usted no esta habilitado para participar en las primarias</p>
                           </SlideBottom> :
-                            voterData ?  <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
+                            voterData ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
                               <div className='flex gap-2 items-center'>
                                 <div>
                                   <img src={`data:image/png;base64,${voterData.imagen}`} />
@@ -180,47 +185,73 @@ export default function Home() {
   )
 }
 
-const Side = ({ children }: {
+const FollowUs = () => {
+  return <div className=' w-fit flex md:flex-row flex-col items-center gap-2 absolute top-10 right-10 max-w-[50vw]'>
+    <strong>Siguenos en:</strong>
+    <a href="https://www.instagram.com/nelsoncosme" target='_blank' rel="noreferrer" className='button'>Instagram</a>
+  </div>
+}
+
+const Side = ({ children, className }: {
   children?: React.ReactNode
-}) => <div className='flex  justify-center'>
-  <div className=' flex flex-col gap-5 justify-between p-5'>
-    <img src="/static/images/prm.png" alt="" className='h-20 w-20 object-cover' />
-    <div>
-    <div>
-      <span style={{
-        fontFamily: 'Kenyan',
-        fontSize: 140,
-        lineHeight: 1
-      }}>Nelson</span>
-      <br />
-      <span className=' uppercase' style={{
-        fontFamily: 'Kenyan',
-        fontSize: 70,
-        lineHeight: 1,
-        color: "#DD9C3F",
-        transform: "translateY(-40px)"
-      }}>
-        Cosme Hijo
-      </span>
-    </div>
-    {children}
-    </div>
-    <div>
-      <h2 className='flex items-center' style={{
-        fontSize: 120
-      }}>REG
-        <img src="/static/images/hand.svg" alt="" className='h-20' />
-        DOR</h2>
-      <img src="/static/images/2024.png" alt="" className=' h-8 w-auto object-cover' />
+  className?: string
+}) => {
+  const size = useScreenSize()
+  const isMedium = (size?.width || 768) < 768
+  const isSmallHeight = (size?.height || 0) < 900
+
+  return <div className={`flex justify-center ${className || ''}`} style={isMedium ? {
+    ...NelsonBg,
+    marginLeft: -20,
+    marginRight: -20,
+  } : {}}>
+    <div className={`flex flex-col ${ isMedium ? "" : "gap-5"} justify-between p-5 md:w-auto w-full`}>
+      <div className=' flex justify-between '>
+        <img src="/static/images/prm.png" alt="" className='md:h-20 md:w-20 w-10 h-10 object-cover' />
+        <FollowUs />
+      </div>
+      <div>
+        <div className='flex flex-col md:items-start items-center'>
+          <img src="/static/images/2024.png" alt="" className=' h-12 w-auto object-cover md:hidden block' />
+          <span style={{
+            fontFamily: 'Kenyan',
+            fontSize: isSmallHeight ? 120 : 140,
+            lineHeight: 1,
+            width: 'fit-content'
+          }}>Nelson</span>
+          <br />
+          <span className=' uppercase' style={{
+            fontFamily: 'Kenyan',
+            fontSize: isSmallHeight ? 55 : 70,
+            lineHeight: 1,
+            width: 'fit-content',
+            color: "#DD9C3F",
+            transform: isSmallHeight ? "translateY(-25px)" : "translateY(-40px)"
+          }}>
+            Cosme Hijo
+          </span>
+        </div>
+        {!isMedium && children}
+      </div>
+      <div className='md:mx-0 mx-auto'>
+        {isMedium && children}
+        <h2 className='flex items-center' style={{
+          fontSize: isSmallHeight ? 100 : 120,
+          height: isSmallHeight ? 100 : 120,
+        }}>
+          REG<img src="/static/images/hand.svg" alt="" className={isSmallHeight ? 'h-16' : 'h-20'} />DOR
+        </h2>
+        <img src="/static/images/2024.png" alt="" className=' h-8 w-auto object-cover hidden md:block' />
+      </div>
     </div>
   </div>
-  </div>
+}
 
 const useScreenSize = () => {
-  const [screenSize, setScreenSize] = useState({
-    width: 0,
-    height: 0,
-  })
+  const [screenSize, setScreenSize] = useState<{
+    width: number,
+    height: number
+  }>()
   useEffect(() => {
     const updateScreenSize = () => {
       setScreenSize({
@@ -228,8 +259,8 @@ const useScreenSize = () => {
         height: window.innerHeight,
       })
     }
-    window.addEventListener('resize', updateScreenSize)
     updateScreenSize()
+    window.addEventListener('resize', updateScreenSize)
     return () => window.removeEventListener('resize', updateScreenSize)
   }, [])
   return screenSize
