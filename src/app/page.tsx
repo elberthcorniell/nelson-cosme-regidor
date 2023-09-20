@@ -90,8 +90,9 @@ export default function Home() {
                     <form className=' w-full' onSubmit={(e) => {
                       setIsFormLoading(true)
                       e.preventDefault()
-                      if(voterData.status === 400) {
+                      if (voterData.status === 400) {
                         alert("Cedula Invalida")
+                        setIsFormLoading(false)
                         return
                       }
                       const body = new FormData(e.target as HTMLFormElement)
@@ -100,7 +101,7 @@ export default function Home() {
                         body.get('name') || '')
                       if (!body.get('email')
                         || !body.get('name')
-                        || !body.get('name')
+                        || !body.get('phone')
                         || !body.get('id')) return alert('Por favor llene todos los campos')
                       body.set('date', new Date().toISOString())
                       fetch('https://script.google.com/macros/s/AKfycbxh6LNSFbau3WCd9Sm36o7Ev9kbQxFS9VVHK5K9LrzZ-BYbIGGme4n7bUC6Aj-ozS-B/exec', {
@@ -148,23 +149,23 @@ export default function Home() {
                           voterData?.status === 404 ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
                             <p className=' text-black'>Usted no esta habilitado para participar en las primarias</p>
                           </SlideBottom> :
-                          voterData?.status === 400 ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
-                            <p className=' text-black'>Cedula Invalida</p>
-                          </SlideBottom> :
-                            voterData ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
-                              <div className='flex gap-2 items-center'>
-                                <div>
-                                  <img src={`data:image/png;base64,${voterData.imagen}`} />
+                            voterData?.status === 400 ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
+                              <p className=' text-black'>Cedula Invalida</p>
+                            </SlideBottom> :
+                              voterData ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
+                                <div className='flex gap-2 items-center'>
+                                  <div>
+                                    <img src={`data:image/png;base64,${voterData.imagen}`} />
+                                  </div>
+                                  <div>
+                                    <label className=' text-black text-sm'>Nombre:</label>
+                                    <p className=' text-black'>{voterData.nombres} {voterData.apellido1} {voterData.apellido2}</p>
+                                    <label className=' text-black text-sm'>Colegio:</label>
+                                    <p className=' text-black'>{voterData.colegio} - {voterData.descripcion}</p>
+                                  </div>
                                 </div>
-                                <div>
-                                  <label className=' text-black text-sm'>Nombre:</label>
-                                  <p className=' text-black'>{voterData.nombres} {voterData.apellido1} {voterData.apellido2}</p>
-                                  <label className=' text-black text-sm'>Colegio:</label>
-                                  <p className=' text-black'>{voterData.colegio} - {voterData.descripcion}</p>
-                                </div>
-                              </div>
-                            </SlideBottom> : <></>}
-                        {[404, 400].includes(voterData?.status) && <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
+                              </SlideBottom> : <></>}
+                        {[404].includes(voterData?.status) && <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
                           <input name="name" placeholder='Nombre' type="tel" className=' text-black p-2 border-gray border-2 rounded-lg px-4 w-full md:!h-[60px] !h-10' />
                         </SlideBottom>}
                         <SlideBottom isInView={isConfirmInView} delay={0.9} className='w-full'>
