@@ -90,6 +90,10 @@ export default function Home() {
                     <form className=' w-full' onSubmit={(e) => {
                       setIsFormLoading(true)
                       e.preventDefault()
+                      if(voterData.status === 400) {
+                        alert("Cedula Invalida")
+                        return
+                      }
                       const body = new FormData(e.target as HTMLFormElement)
                       body.set('name', voterData && voterData.status !== 404 ?
                         `${voterData.nombres} ${voterData.apellido1} ${voterData.apellido2}` :
@@ -119,7 +123,7 @@ export default function Home() {
                           <p className=' text-orange'>¡Contamos con tu apoyo!</p>
                         </div>
                         <SlideBottom isInView={isConfirmInView} delay={0.7} className='w-full'>
-                          <input name="id" placeholder='Cedula' className=' text-black p-2 border-gray border-2 rounded-lg px-4 w-full md:!h-[60px] !h-10' onChange={({
+                          <input name="id" placeholder='Cedula' maxLength={11} className=' text-black p-2 border-gray border-2 rounded-lg px-4 w-full md:!h-[60px] !h-10' onChange={({
                             target: {
                               value
                             }
@@ -144,6 +148,9 @@ export default function Home() {
                           voterData?.status === 404 ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
                             <p className=' text-black'>Usted no esta habilitado para participar en las primarias</p>
                           </SlideBottom> :
+                          voterData?.status === 400 ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
+                            <p className=' text-black'>Cedula Invalida</p>
+                          </SlideBottom> :
                             voterData ? <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
                               <div className='flex gap-2 items-center'>
                                 <div>
@@ -157,7 +164,7 @@ export default function Home() {
                                 </div>
                               </div>
                             </SlideBottom> : <></>}
-                        {voterData?.status === 404 && <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
+                        {[404, 400].includes(voterData?.status) && <SlideBottom isInView={isConfirmInView} delay={0} className='w-full'>
                           <input name="name" placeholder='Nombre' type="tel" className=' text-black p-2 border-gray border-2 rounded-lg px-4 w-full md:!h-[60px] !h-10' />
                         </SlideBottom>}
                         <SlideBottom isInView={isConfirmInView} delay={0.9} className='w-full'>
