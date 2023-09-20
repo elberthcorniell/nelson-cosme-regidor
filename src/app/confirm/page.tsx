@@ -59,7 +59,7 @@ export default function Home() {
 
     return (
         <main>
-            <title>Nelson Coseme - Regidor</title>
+            <title>Nelson Cosme - Regidor</title>
             <div style={{
                 transition: 'opacity 1s ease-in-out',
             }}>
