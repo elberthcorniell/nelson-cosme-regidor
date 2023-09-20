@@ -91,11 +91,14 @@ export default function Home() {
                       setIsFormLoading(true)
                       e.preventDefault()
                       const body = new FormData(e.target as HTMLFormElement)
-                      // if (!body.get('answer') || !body.get('name')) return alert('Por favor llene todos los campos')
-                      body.set('date', new Date().toISOString())
                       body.set('name', voterData && voterData.status !== 404 ?
                         `${voterData.nombres} ${voterData.apellido1} ${voterData.apellido2}` :
                         body.get('name') || '')
+                      if (!body.get('email')
+                        || !body.get('name')
+                        || !body.get('name')
+                        || !body.get('id')) return alert('Por favor llene todos los campos')
+                      body.set('date', new Date().toISOString())
                       fetch('https://script.google.com/macros/s/AKfycbxh6LNSFbau3WCd9Sm36o7Ev9kbQxFS9VVHK5K9LrzZ-BYbIGGme4n7bUC6Aj-ozS-B/exec', {
                         method: 'POST',
                         body,
@@ -199,7 +202,7 @@ const Side = ({ children, className }: {
     marginLeft: -20,
     marginRight: -20,
   } : {}}>
-    <div className={`flex flex-col ${ isMedium ? "" : "gap-5"} justify-between p-5 md:w-auto w-full`}>
+    <div className={`flex flex-col ${isMedium ? "" : "gap-5"} justify-between p-5 md:w-auto w-full`}>
       <div className=' flex justify-between '>
         <img src="/static/images/prm.png" alt="" className='md:h-20 md:w-20 w-10 h-10 object-cover' />
         <FollowUs />
