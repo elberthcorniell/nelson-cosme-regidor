@@ -114,7 +114,8 @@ const Side = ({ children, className }: {
             <div className='md:mx-0 mx-auto'>
                 <button onClick={() => {
                     const shareData = {
-                        url: `https://${window.location.host}`
+                        url: `https://${window.location.host}`,
+                        text: "Verifica si estás habilitado para votar en las Elecciones Primarias del 1 de octubre del 2023 y si tú intención del voto es a favor de Nelson Cosme Hijo - REG👍🏼DOR, llena el formulario y regístrate en nuestra base de datos."
                     }
                     if (navigator.share && navigator.canShare(shareData)) {
                         navigator.share(shareData)
